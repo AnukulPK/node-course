@@ -11,9 +11,6 @@ const forecast = (latitude, longitude, callback) => {
       callback("Unable to retrieve weather for this location", undefined);
     } else {
       const data = response.body;
-      console.log(
-        `${data.current.weather_descriptions[0]}. Is is currently ${data.current.temperature} degrees out. It feels like ${data.current.feelslike} degrees out`
-      );
       callback(undefined, {
         weatherDescription: data.current.weather_descriptions[0],
         temperature: data.current.temperature,
