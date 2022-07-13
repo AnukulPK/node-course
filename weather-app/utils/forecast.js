@@ -4,13 +4,13 @@ const forecast = (latitude, longitude, callback) => {
   const forecastUrl = `http://api.weatherstack.com/current?access_key=a7a64df4097f538f958aec8f033c7299&query=${encodeURIComponent(
     latitude
   )},${encodeURIComponent(longitude)}&units=f`;
-  request({ url: forecastUrl, json: true }, (error, response) => {
+  request({ url: forecastUrl, json: true }, (error, { body } = {}) => {
     if (error) {
       callback("Unable to connect to weather service", undefined);
-    } else if (response.body.error) {
+    } else if (body.error) {
       callback("Unable to retrieve weather for this location", undefined);
     } else {
-      const data = response.body;
+      const data = body;
       callback(undefined, {
         weatherDescription: data.current.weather_descriptions[0],
         temperature: data.current.temperature,
