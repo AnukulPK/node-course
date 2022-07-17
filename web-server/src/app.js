@@ -46,6 +46,22 @@ app.get("/weather", (req, res) => {
   });
 });
 
+app.get("/help/*", (req, res) => {
+  res.render("404", {
+    errorMessage: "Help Article Not found",
+    title: "Help Article Not found",
+    name: "Anukul",
+  });
+});
+
+app.get("*", (req, res) => {
+  res.render("404", {
+    errorMessage: "Page not found",
+    title: "Page Not Found",
+    name: "Anukul",
+  });
+});
+
 // app.get("/about", (req, res) => {
 //   res.send("<h1>About Page!</h1>");
 // });
