@@ -1,6 +1,8 @@
 const path = require("path");
 const express = require("express");
 const hbs = require("hbs");
+const geoCode = require("./utils/geoCode");
+const forecast = require("./utils/forecast");
 
 const app = express();
 
@@ -46,11 +48,30 @@ app.get("/weather", (req, res) => {
     });
   }
 
-  res.send({
-    location: "Bangalore",
-    forecast: "It is raining",
-    address: req.query.address,
-  });
+  geoCode(
+    req.query.address,
+    (geoCodeError, { latitude, longitude, location } = {}) => {
+      if (geoCodeError) {
+        return res.send({
+          error: geoCodeError,
+        });
+      }
+
+      forecast(latitude, longitude, (forecastError, forecastData) => {
+        if (forecastError) {
+          return res.send({
+            error: forecastError,
+          });
+        }
+
+        return res.send({
+          forecast: forecastData.finalMessage,
+          location: location,
+          address: req.query.address,
+        });
+      });
+    }
+  );
 });
 
 app.get("/products", (req, res) => {
